@@ -1,0 +1,49 @@
+
+	<div class="col-md-2">
+                <label for="zone">Zone</label>
+                <select name="zone" id="zone" class="form-control" required>
+                     <option>--Select--</option>
+                   {% for data in zone %}
+                        <option value="{{data.code}}">{{ data.name }}</option>
+                   {% endfor %}
+                </select>
+            </div>
+            
+<div class="col-md-2">
+                <label for="area">Area</label>
+                <select name="area" id="area" class="form-control" required>
+
+                </select>
+          </div>
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#search_reading input,#search_reading select').addClass('form-control');
+      $('input.btn').removeClass('form-control');
+         $('#example').DataTable();
+
+
+        $('select#zone').change(function () {
+
+             var optionSelected = $(this).find("option:selected");
+             var zone_code   =  optionSelected.val();
+
+             data = {'zone_code' : zone_code };
+
+             ajax('getdetails',data,function(result){
+
+                    console.log(result);
+                    $("#area option").remove();
+                    for (var i = result.length - 1; i >= 0; i--) {
+                        $("#area").append('<option value=' + result[i].code + '>'+ result[i].name +'</option>');
+                    };
+
+                 });
+         });
+
+
+    })
+</script>

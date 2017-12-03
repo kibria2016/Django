@@ -1,0 +1,24 @@
+from django.utils import simplejson
+from django.http import HttpResponse
+
+
+def MeterReading_List(request):
+    
+    form = SearchDbForm   
+    zone = Zone.objects.all()
+    context = {'form': form, 'zone': zone}
+
+ return render(request, 'meter_reading_list.html', context)
+
+
+def getdetails(request):
+
+    zone_code = request.GET['zone_code']
+    result_set = []
+    selected_zone = Zone.objects.get(code=zone_code)
+    all_areas = selected_zone.area_set.all().order_by('-code')
+
+    for area in all_areas:
+        result_set.append({'name': area.name, 'code': area.code})
+
+    return HttpResponse(simplejson.dumps(result_set),  content_type='application/json')
